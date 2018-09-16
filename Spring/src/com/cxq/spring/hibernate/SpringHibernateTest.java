@@ -1,0 +1,43 @@
+package com.cxq.spring.hibernate;
+
+import java.sql.SQLException;
+import java.util.Arrays;
+
+import javax.sql.DataSource;
+
+import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.cxq.spring.hibernate.service.BookShopService;
+import com.cxq.spring.hibernate.service.Cashier;
+
+public class SpringHibernateTest {
+
+	private ApplicationContext ctx = null;
+	private BookShopService bookShopService = null;
+	private Cashier cashier = null;
+	
+	{
+		ctx = new ClassPathXmlApplicationContext("com/cxq/spring/hibernate/applicationContext.xml");
+		bookShopService = ctx.getBean(BookShopService.class);
+		cashier = ctx.getBean(Cashier.class);
+	}
+	
+	@Test
+	public void testCashier(){
+		cashier.checkout("AA", Arrays.asList("1001","1002"));
+	}
+	
+	@Test
+	public void testBookShopService(){
+		bookShopService.purchase("AA", "1001");
+	}
+	
+	@Test
+	public void testDataSource() throws SQLException {
+		DataSource dataSource = ctx.getBean(DataSource.class);
+		System.out.println(dataSource.getConnection());
+	}
+
+}
